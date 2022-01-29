@@ -36,6 +36,20 @@ describe('Main', () => {
       cy.get('@firstItem').should('contain.text', '0hello');
     });
   });
+
+  it('complete todo item', () => {
+    addTodo('0');
+    getTodoList().children('li:first').as('firstItem');
+    cy.get('@firstItem').find('.toggle').check();
+    cy.get('@firstItem').should('have.class', 'completed');
+  });
+
+  it('remove todo item', () => {
+    addTodo('0');
+    getTodoList().children('li:first').as('firstItem');
+    cy.get('@firstItem').find('.destroy').click({ force: true });
+    getTodoList().children().should('have.length', 0);
+  });
 });
 
 function edtingItem() {

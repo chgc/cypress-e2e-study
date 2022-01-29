@@ -16,12 +16,19 @@ export class AppComponent {
   todos: Todo[] = [];
 
   addTodo(ele: HTMLInputElement) {
-    this.todos.push({
-      id: uuidv4(),
-      content: ele.value,
-      isCompleted: false,
-      isEdit: false,
-    });
+    this.todos = [
+      ...this.todos,
+      {
+        id: uuidv4(),
+        content: ele.value,
+        isCompleted: false,
+        isEdit: false,
+      },
+    ];
     ele.value = '';
+  }
+
+  removeTodo(todo: Todo) {
+    this.todos = this.todos.filter((x) => x.id !== todo.id);
   }
 }
