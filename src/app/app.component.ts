@@ -5,6 +5,7 @@ type Todo = {
   id: string;
   content: string;
   isCompleted: boolean;
+  isEdit: boolean;
 };
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent {
       id: uuidv4(),
       content: ele.value,
       isCompleted: false,
+      isEdit: false,
     });
     ele.value = '';
   }

@@ -13,7 +13,40 @@ describe('Main', () => {
 
   it('add new todo, list should have 3 items', () => {
     // cy.get('.new-todo').type('abc').type('{enter}');
-    cy.get('[data-cy=newTodo]').type('abc').type('{enter}');
-    cy.get('.todo-list').children().should('have.length', 1);
+    addTodo('abc');
+    getTodoList().children().should('have.length', 1);
+  });
+
+  describe('work with one todo', () => {
+    beforeEach(() => {
+      for (let i = 0; i < 3; i++) {
+        addTodo(i.toString());
+      }
+    });
+
+    it('edit first item', () => {
+      edtingItem();
+      cy.get('@firstItem').should('have.class', 'editing');
+      cy.get('@firstItem').find('input.edit').should('exist');
+    });
+
+    it('edit first item value and enter save', () => {
+      edtingItem();
+      cy.get('@firstItem').find('input.edit').type('hello').type('{enter}');
+      cy.get('@firstItem').should('contain.text', '0hello');
+    });
   });
 });
+
+function edtingItem() {
+  getTodoList().children('li:first').as('firstItem');
+  cy.get('@firstItem').find('label').dblclick();
+}
+
+function getTodoList() {
+  return cy.get('.todo-list');
+}
+
+function addTodo(content: string) {
+  cy.get('[data-cy=newTodo]').type(content).type('{enter}');
+}
