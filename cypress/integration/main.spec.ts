@@ -50,6 +50,25 @@ describe('Main', () => {
     cy.get('@firstItem').find('.destroy').click({ force: true });
     getTodoList().children().should('have.length', 0);
   });
+
+  it('should filter with only completed todo', () => {
+    addTodo('1');
+    addTodo('2');
+    addTodo('3');
+    getTodoList().children('li:first').find('.toggle').check();
+    cy.get('[data-cy=filter-completed]').click();
+    getTodoList().children().should('have.length', 1);
+  });
+
+  it('should have remain active todo count', () => {
+    cy.get('[data-cy=todo-count]').as('todo-count');
+    cy.get('@todo-count').should('have.text', '0 item left');
+    addTodo('1');
+    addTodo('2');
+    cy.get('@todo-count').should('have.text', '2 item left');
+    getTodoList().children('li:first').find('.toggle').check();
+    cy.get('@todo-count').should('have.text', '1 item left');
+  });
 });
 
 function edtingItem() {

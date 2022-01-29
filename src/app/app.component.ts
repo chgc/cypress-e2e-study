@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
-type Todo = {
+export type Todo = {
   id: string;
   content: string;
   isCompleted: boolean;
@@ -14,6 +16,17 @@ type Todo = {
 })
 export class AppComponent {
   todos: Todo[] = [];
+  todoFilter = '/';
+  constructor(private route: ActivatedRoute) {
+    this.route.fragment
+      .pipe(
+        map((value) => value ?? '/'),
+        map((value) => value.substring(1))
+      )
+      .subscribe({
+        next: (value) => (this.todoFilter = value),
+      });
+  }
 
   addTodo(ele: HTMLInputElement) {
     this.todos = [
@@ -26,6 +39,11 @@ export class AppComponent {
       },
     ];
     ele.value = '';
+  }
+
+  get itemCount() {
+    console.log('a');
+    return this.todos.filter((x) => !x.isCompleted).length;
   }
 
   removeTodo(todo: Todo) {
