@@ -69,6 +69,15 @@ describe('Main', () => {
     getTodoList().children('li:first').find('.toggle').check();
     cy.get('@todo-count').should('have.text', '1 item left');
   });
+
+  it('should clear completed todo', () => {
+    addTodo('1');
+    addTodo('2');
+    getTodoList().children('li:first').find('.toggle').check();
+
+    cy.get('[data-cy=clear-completed]').click();
+    getTodoList().children().should('have.length', 1);
+  });
 });
 
 function edtingItem() {

@@ -49,4 +49,8 @@ export class AppComponent {
   removeTodo(todo: Todo) {
     this.todos = this.todos.filter((x) => x.id !== todo.id);
   }
+
+  clearCompleted() {
+    this.todos = this.todos.filter((x) => !x.isCompleted);
+  }
 }
